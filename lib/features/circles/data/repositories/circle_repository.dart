@@ -96,7 +96,7 @@ class CircleRepository implements ICircleRepository {
     final records = await StoreRefs.attendance.find(db, finder: Finder(
       filter: Filter.equals('studentId', studentId),
     ));
-    return records.map(_attendanceFromMap).toList();
+    return records.map((r) => _attendanceFromMap(r.key, r.value)).toList();
   }
 
   Map<String, dynamic> _circleToMap(Circle c) => {

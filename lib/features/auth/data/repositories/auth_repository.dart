@@ -20,7 +20,7 @@ class AuthRepository implements IAuthRepository {
       finder: Finder(filter: Filter.equals('phone', phone)),
     );
     if (records.isEmpty) return null;
-    return _fromMap(records.first);
+    return _fromMap(records.first.key, records.first.value);
   }
 
   @override
@@ -49,7 +49,7 @@ class AuthRepository implements IAuthRepository {
     final db = await _database;
     final records = await StoreRefs.users.find(db, finder: Finder(limit: 1));
     if (records.isEmpty) return null;
-    return _fromMap(records.first);
+    return _fromMap(records.first.key, records.first.value);
   }
 
   @override
