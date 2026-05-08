@@ -1,4 +1,5 @@
 enum ConflictStrategy { lastWriteWins, merge }
+import 'sync_record.dart';
 
 class ConflictResolver {
   static SyncRecord resolve(
