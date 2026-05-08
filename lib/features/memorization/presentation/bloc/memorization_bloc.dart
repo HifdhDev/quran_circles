@@ -30,9 +30,13 @@ sealed class MemorizationState extends Equatable {
   List<Object?> get props => [];
 }
 
-class MemorizationInitial extends MemorizationState {}
+class MemorizationInitial extends MemorizationState {
+  const MemorizationInitial();
+}
 
-class MemorizationLoading extends MemorizationState {}
+class MemorizationLoading extends MemorizationState {
+  const MemorizationLoading();
+}
 
 class MemorizationLoaded extends MemorizationState {
   final List<MemorizationRecord> records;

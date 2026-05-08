@@ -47,9 +47,13 @@ sealed class CircleState extends Equatable {
   List<Object?> get props => [];
 }
 
-class CircleInitial extends CircleState {}
+class CircleInitial extends CircleState {
+  const CircleInitial();
+}
 
-class CircleLoading extends CircleState {}
+class CircleLoading extends CircleState {
+  const CircleLoading();
+}
 
 class CirclesLoaded extends CircleState {
   final List<Circle> circles;

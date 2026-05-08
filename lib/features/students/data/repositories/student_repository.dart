@@ -19,7 +19,7 @@ class StudentRepository implements IStudentRepository {
       finder = Finder(filter: Filter.equals('isActive', activeOnly));
     }
     final records = await StoreRefs.students.find(db, finder: finder);
-    return records.map(_fromMap).toList();
+    return records.map((r) => _fromMap(r.key, r.value)).toList();
   }
 
   @override
@@ -27,7 +27,7 @@ class StudentRepository implements IStudentRepository {
     final db = await _database;
     final record = await StoreRefs.students.record(id).get(db);
     if (record == null) return null;
-    return _fromMap(RecordSnapshot(id, record));
+    return _fromMap(id, record);
   }
 
   @override
@@ -54,7 +54,7 @@ class StudentRepository implements IStudentRepository {
     final records = await StoreRefs.students.find(db);
     final lower = query.toLowerCase();
     return records
-        .map(_fromMap)
+        .map((r) => _fromMap(r.key, r.value))
         .where((s) => s.name.toLowerCase().contains(lower) || s.phone.contains(query))
         .toList();
   }
@@ -70,10 +70,9 @@ class StudentRepository implements IStudentRepository {
         'isActive': s.isActive,
       };
 
-  Student _fromMap(RecordSnapshot<int, Map<String, dynamic>> record) {
-    final d = record.value;
+  Student _fromMap(int id, Map<String, dynamic> d) {
     return Student(
-      id: record.key,
+      id: id,
       name: d['name'] as String,
       age: d['age'] as int,
       gender: Gender.values.firstWhere((g) => g.name == d['gender']),

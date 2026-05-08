@@ -55,10 +55,9 @@ class AuthRepository implements IAuthRepository {
   @override
   Future<void> logout() async {}
 
-  User _fromMap(RecordSnapshot<int, Map<String, dynamic>> record) {
-    final data = record.value;
+  User _fromMap(int id, Map<String, dynamic> data) {
     return User(
-      id: record.key,
+      id: id,
       name: data['name'] as String,
       phone: data['phone'] as String,
       role: UserRole.values.firstWhere((r) => r.name == data['role']),

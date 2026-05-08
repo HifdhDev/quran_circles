@@ -42,9 +42,13 @@ sealed class StudentState extends Equatable {
   List<Object?> get props => [];
 }
 
-class StudentInitial extends StudentState {}
+class StudentInitial extends StudentState {
+  const StudentInitial();
+}
 
-class StudentLoading extends StudentState {}
+class StudentLoading extends StudentState {
+  const StudentLoading();
+}
 
 class StudentLoaded extends StudentState {
   final List<Student> students;
