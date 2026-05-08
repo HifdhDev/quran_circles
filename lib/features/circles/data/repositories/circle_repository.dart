@@ -63,7 +63,7 @@ class CircleRepository implements ICircleRepository {
       filter: Filter.and([
         Filter.equals('circleId', circleId),
         Filter.custom((snapshot) {
-          final d = snapshot.value['date'] as String? ?? '';
+          final d = (snapshot.value as Map<String, dynamic>)['date'] as String? ?? '';
           return d.startsWith(dateStr);
         }),
       ]),
@@ -81,7 +81,7 @@ class CircleRepository implements ICircleRepository {
       filter: Filter.and([
         Filter.equals('circleId', circleId),
         Filter.custom((snapshot) {
-          final d = snapshot.value['date'] as String? ?? '';
+          final d = (snapshot.value as Map<String, dynamic>)['date'] as String? ?? '';
           return d.substring(0, 10).compareTo(fromStr) >= 0 &&
               d.substring(0, 10).compareTo(toStr) <= 0;
         }),
