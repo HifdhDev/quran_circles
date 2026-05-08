@@ -18,6 +18,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: 3.41.9
+      - run: flutter create --project-name quran_circles --platforms=android .
       - run: flutter pub get
       - run: flutter build apk --release --split-per-abi
       - uses: actions/upload-artifact@v4
@@ -33,6 +34,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: 3.41.9
+      - run: flutter create --project-name quran_circles --platforms=web .
       - run: flutter pub get
       - run: flutter build web --release
       - uses: actions/upload-artifact@v4
@@ -48,6 +50,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: 3.41.9
+      - run: flutter create --project-name quran_circles --platforms=ios .
       - run: flutter pub get
       - run: flutter build ios --release --no-codesign
       - uses: actions/upload-artifact@v4
