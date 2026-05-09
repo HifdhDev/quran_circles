@@ -37,7 +37,7 @@ class BluetoothTransport extends SyncTransport {
   }
 
   @override
-  void send(List<int> data) {
+  Future<void> send(List<int> data) async {
     QuranLogger.d('Bluetooth send would write ${data.length} bytes');
   }
 

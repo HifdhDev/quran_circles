@@ -12,7 +12,7 @@ class DatabaseService {
       : _factory = factory ?? databaseFactoryIo;
 
   Future<Database> get database async {
-    if (_database != null && _database!.isOpen) return _database!;
+    if (_database != null) return _database!;
     _database = await _open();
     return _database!;
   }
@@ -24,7 +24,7 @@ class DatabaseService {
   }
 
   Future<void> close() async {
-    if (_database != null && _database!.isOpen) {
+    if (_database != null) {
       await _database!.close();
       _database = null;
     }

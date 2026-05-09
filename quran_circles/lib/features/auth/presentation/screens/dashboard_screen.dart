@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../data/repositories/auth_repository.dart';
+import 'login_screen.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -13,6 +16,10 @@ class DashboardScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.sync),
             onPressed: () => _showSyncDialog(context),
+          ),
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () => _logout(context),
           ),
         ],
       ),
@@ -72,6 +79,33 @@ class DashboardScreen extends StatelessWidget {
         content: const Text('جميع الأجهزة متزامنة'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('حسناً')),
+        ],
+      ),
+    );
+  }
+
+  void _logout(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('تسجيل خروج'),
+        content: const Text('هل تريد تسجيل الخروج؟'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('إلغاء')),
+          FilledButton(
+            onPressed: () {
+              context.read<AuthRepository>().logout();
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (_) => const Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: LoginScreen(),
+                )),
+                (_) => false,
+              );
+            },
+            child: const Text('تسجيل خروج'),
+          ),
         ],
       ),
     );

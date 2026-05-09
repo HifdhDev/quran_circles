@@ -17,9 +17,9 @@ class NetworkUtils {
     return null;
   }
 
-  static bool isWiFiConnected() {
+  static Future<bool> isWiFiConnected() async {
     try {
-      return NetworkInterface.list().then((list) => list.isNotEmpty).catchError((_) => false) as bool;
+      return await NetworkInterface.list().then((list) => list.isNotEmpty).catchError((_) => false);
     } catch (_) {
       return false;
     }

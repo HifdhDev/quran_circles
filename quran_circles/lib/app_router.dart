@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'features/students/presentation/screens/student_list_screen.dart';
+import 'features/students/presentation/screens/student_detail_screen.dart';
+import 'features/students/domain/entities/student.dart';
 import 'features/circles/presentation/screens/circle_list_screen.dart';
 import 'features/circles/presentation/screens/circle_detail_screen.dart';
 import 'features/circles/domain/entities/circle.dart';
 import 'features/messaging/presentation/screens/message_list_screen.dart';
+import 'features/memorization/presentation/screens/memorization_screen.dart';
 import 'features/reports/presentation/screens/report_screen.dart';
 import 'features/reports/presentation/screens/settings_screen.dart';
 
@@ -12,6 +15,11 @@ class AppRouter {
     switch (routeSettings.name) {
       case '/students':
         return MaterialPageRoute(builder: (_) => const StudentListScreen());
+      case '/student_detail':
+        final student = routeSettings.arguments as Student;
+        return MaterialPageRoute(
+          builder: (_) => StudentDetailScreen(student: student),
+        );
       case '/circles':
         return MaterialPageRoute(builder: (_) => const CircleListScreen());
       case '/circle_detail':
@@ -19,6 +27,8 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => CircleDetailScreen(circle: circle),
         );
+      case '/memorization':
+        return MaterialPageRoute(builder: (_) => const MemorizationScreen());
       case '/messages':
         return MaterialPageRoute(builder: (_) => const MessageListScreen());
       case '/reports':

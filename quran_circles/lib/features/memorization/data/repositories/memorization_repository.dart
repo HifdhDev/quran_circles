@@ -18,7 +18,7 @@ class MemorizationRepository implements IMemorizationRepository {
       filter: Filter.equals('studentId', studentId),
       sortOrders: [SortOrder('recordedAt')],
     ));
-    return records.map(_fromMap).toList();
+    return records.map((r) => _fromMap(r.key, r.value)).toList();
   }
 
   @override
@@ -27,18 +27,24 @@ class MemorizationRepository implements IMemorizationRepository {
     final db = await _database;
     final filters = <Filter>[Filter.equals('circleId', circleId)];
     if (from != null) {
-      filters.add(Filter.greaterThanOrEqualTo(
-          'recordedAt', from.toUtc().toIso8601String()));
+      final fromStr = from.toUtc().toIso8601String();
+      filters.add(Filter.custom((snapshot) {
+        final v = (snapshot.value as Map<String, dynamic>)['recordedAt'] as String? ?? '';
+        return v.compareTo(fromStr) >= 0;
+      }));
     }
     if (to != null) {
-      filters.add(Filter.lessThanOrEqualTo(
-          'recordedAt', to.toUtc().toIso8601String()));
+      final toStr = to.toUtc().toIso8601String();
+      filters.add(Filter.custom((snapshot) {
+        final v = (snapshot.value as Map<String, dynamic>)['recordedAt'] as String? ?? '';
+        return v.compareTo(toStr) <= 0;
+      }));
     }
     final records = await StoreRefs.memorization.find(db, finder: Finder(
       filter: Filter.and(filters),
       sortOrders: [SortOrder('recordedAt')],
     ));
-    return records.map(_fromMap).toList();
+    return records.map((r) => _fromMap(r.key, r.value)).toList();
   }
 
   @override
@@ -51,7 +57,7 @@ class MemorizationRepository implements IMemorizationRepository {
         Filter.equals('circleId', circleId),
       ]),
     ));
-    return records.map(_fromMap).toList();
+    return records.map((r) => _fromMap(r.key, r.value)).toList();
   }
 
   @override
@@ -102,11 +108,9 @@ class MemorizationRepository implements IMemorizationRepository {
         'teacherId': r.teacherId,
       };
 
-  MemorizationRecord _fromMap(
-      RecordSnapshot<int, Map<String, dynamic>> record) {
-    final d = record.value;
+  MemorizationRecord _fromMap(int id, Map<String, dynamic> d) {
     return MemorizationRecord(
-      id: record.key,
+      id: id,
       studentId: d['studentId'] as int,
       circleId: d['circleId'] as int,
       surahNumber: d['surahNumber'] as int,

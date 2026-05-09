@@ -9,18 +9,18 @@ import 'features/memorization/presentation/bloc/memorization_bloc.dart';
 import 'features/memorization/data/repositories/memorization_repository.dart';
 import 'features/messaging/presentation/bloc/message_bloc.dart';
 import 'features/messaging/data/repositories/message_repository.dart';
+import 'features/auth/data/repositories/auth_repository.dart';
 import 'features/auth/presentation/screens/login_screen.dart';
-import 'features/auth/presentation/screens/dashboard_screen.dart';
 import 'core/database/database_service.dart';
 import 'core/logging/quran_logger.dart';
 import 'l10n/app_localizations.dart';
 import 'app_router.dart';
 
-final DatabaseService _databaseService = DatabaseService();
+final DatabaseService databaseService = DatabaseService();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await _databaseService.database;
+  await databaseService.database;
   QuranLogger.instance.init(Directory.systemTemp);
   runApp(const QuranCirclesApp());
 }
@@ -31,7 +31,7 @@ class QuranCirclesApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppProviders(
-      databaseService: _databaseService,
+      databaseService: databaseService,
       child: MaterialApp(
         title: 'حلقات القرآن',
         debugShowCheckedModeBanner: false,
@@ -68,6 +68,8 @@ class AppProviders extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
+        RepositoryProvider<DatabaseService>(create: (_) => databaseService),
+        RepositoryProvider(create: (_) => AuthRepository(databaseService)),
         RepositoryProvider(create: (_) => StudentRepository(databaseService)),
         RepositoryProvider(create: (_) => CircleRepository(databaseService)),
         RepositoryProvider(create: (_) => MemorizationRepository(databaseService)),

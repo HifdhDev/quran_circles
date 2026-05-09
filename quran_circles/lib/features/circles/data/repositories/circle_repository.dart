@@ -20,7 +20,7 @@ class CircleRepository implements ICircleRepository {
       finder = Finder(filter: Filter.equals('isActive', activeOnly));
     }
     final records = await StoreRefs.circles.find(db, finder: finder);
-    return records.map(_circleFromMap).toList();
+    return records.map((r) => _circleFromMap(r.key, r.value)).toList();
   }
 
   @override
@@ -28,7 +28,7 @@ class CircleRepository implements ICircleRepository {
     final db = await _database;
     final record = await StoreRefs.circles.record(id).get(db);
     if (record == null) return null;
-    return _circleFromMap(RecordSnapshot(id, record));
+    return _circleFromMap(id, record);
   }
 
   @override
@@ -63,12 +63,12 @@ class CircleRepository implements ICircleRepository {
       filter: Filter.and([
         Filter.equals('circleId', circleId),
         Filter.custom((snapshot) {
-          final d = snapshot.value['date'] as String? ?? '';
+          final d = (snapshot.value as Map<String, dynamic>)['date'] as String? ?? '';
           return d.startsWith(dateStr);
         }),
       ]),
     ));
-    return records.map(_attendanceFromMap).toList();
+    return records.map((r) => _attendanceFromMap(r.key, r.value)).toList();
   }
 
   @override
@@ -81,13 +81,13 @@ class CircleRepository implements ICircleRepository {
       filter: Filter.and([
         Filter.equals('circleId', circleId),
         Filter.custom((snapshot) {
-          final d = snapshot.value['date'] as String? ?? '';
+          final d = (snapshot.value as Map<String, dynamic>)['date'] as String? ?? '';
           return d.substring(0, 10).compareTo(fromStr) >= 0 &&
               d.substring(0, 10).compareTo(toStr) <= 0;
         }),
       ]),
     ));
-    return records.map(_attendanceFromMap).toList();
+    return records.map((r) => _attendanceFromMap(r.key, r.value)).toList();
   }
 
   @override
@@ -96,7 +96,7 @@ class CircleRepository implements ICircleRepository {
     final records = await StoreRefs.attendance.find(db, finder: Finder(
       filter: Filter.equals('studentId', studentId),
     ));
-    return records.map(_attendanceFromMap).toList();
+    return records.map((r) => _attendanceFromMap(r.key, r.value)).toList();
   }
 
   Map<String, dynamic> _circleToMap(Circle c) => {
@@ -108,10 +108,9 @@ class CircleRepository implements ICircleRepository {
         'isActive': c.isActive,
       };
 
-  Circle _circleFromMap(RecordSnapshot<int, Map<String, dynamic>> record) {
-    final d = record.value;
+  Circle _circleFromMap(int id, Map<String, dynamic> d) {
     return Circle(
-      id: record.key,
+      id: id,
       name: d['name'] as String,
       teacherId: d['teacherId'] as int,
       description: d['description'] as String?,
@@ -129,11 +128,9 @@ class CircleRepository implements ICircleRepository {
         'notes': a.notes,
       };
 
-  Attendance _attendanceFromMap(
-      RecordSnapshot<int, Map<String, dynamic>> record) {
-    final d = record.value;
+  Attendance _attendanceFromMap(int id, Map<String, dynamic> d) {
     return Attendance(
-      id: record.key,
+      id: id,
       studentId: d['studentId'] as int,
       circleId: d['circleId'] as int,
       date: DateTime.parse(d['date'] as String).toLocal(),

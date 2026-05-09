@@ -20,7 +20,7 @@ class AuthRepository implements IAuthRepository {
       finder: Finder(filter: Filter.equals('phone', phone)),
     );
     if (records.isEmpty) return null;
-    return _fromMap(records.first);
+    return _fromMap(records.first.key, records.first.value);
   }
 
   @override
@@ -49,16 +49,15 @@ class AuthRepository implements IAuthRepository {
     final db = await _database;
     final records = await StoreRefs.users.find(db, finder: Finder(limit: 1));
     if (records.isEmpty) return null;
-    return _fromMap(records.first);
+    return _fromMap(records.first.key, records.first.value);
   }
 
   @override
   Future<void> logout() async {}
 
-  User _fromMap(RecordSnapshot<int, Map<String, dynamic>> record) {
-    final data = record.value;
+  User _fromMap(int id, Map<String, dynamic> data) {
     return User(
-      id: record.key,
+      id: id,
       name: data['name'] as String,
       phone: data['phone'] as String,
       role: UserRole.values.firstWhere((r) => r.name == data['role']),

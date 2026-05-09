@@ -18,7 +18,7 @@ class MessageRepository implements IMessageRepository {
       filter: Filter.equals('receiverId', receiverId),
       sortOrders: [SortOrder('sentAt', false)],
     ));
-    return records.map(_fromMap).toList();
+    return records.map((r) => _fromMap(r.key, r.value)).toList();
   }
 
   @override
@@ -28,7 +28,7 @@ class MessageRepository implements IMessageRepository {
       filter: Filter.equals('senderId', senderId),
       sortOrders: [SortOrder('sentAt', false)],
     ));
-    return records.map(_fromMap).toList();
+    return records.map((r) => _fromMap(r.key, r.value)).toList();
   }
 
   @override
@@ -38,7 +38,7 @@ class MessageRepository implements IMessageRepository {
       filter: Filter.equals('circleId', circleId),
       sortOrders: [SortOrder('sentAt', false)],
     ));
-    return records.map(_fromMap).toList();
+    return records.map((r) => _fromMap(r.key, r.value)).toList();
   }
 
   @override
@@ -73,10 +73,9 @@ class MessageRepository implements IMessageRepository {
         'isRead': m.isRead,
       };
 
-  Message _fromMap(RecordSnapshot<int, Map<String, dynamic>> record) {
-    final d = record.value;
+  Message _fromMap(int id, Map<String, dynamic> d) {
     return Message(
-      id: record.key,
+      id: id,
       title: d['title'] as String,
       body: d['body'] as String,
       senderId: d['senderId'] as int,

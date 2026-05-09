@@ -1,0 +1,31 @@
+# Flutter
+.quran_circles/
+build/
+.dart_tool/
+.packages
+.pub/
+pubspec.lock
+
+# Android
+android-apks/
+*.apk
+*.aab
+*.apk.gz
+
+# iOS
+ios/Pods/
+ios/.symlinks/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Misc
+*.log
+*.tmp

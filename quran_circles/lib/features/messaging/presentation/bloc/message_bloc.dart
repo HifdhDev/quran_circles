@@ -40,9 +40,13 @@ sealed class MessageState extends Equatable {
   List<Object?> get props => [];
 }
 
-class MessageInitial extends MessageState {}
+class MessageInitial extends MessageState {
+  const MessageInitial();
+}
 
-class MessageLoading extends MessageState {}
+class MessageLoading extends MessageState {
+  const MessageLoading();
+}
 
 class MessagesLoaded extends MessageState {
   final List<Message> messages;
